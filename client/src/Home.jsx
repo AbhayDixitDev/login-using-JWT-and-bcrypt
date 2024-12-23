@@ -19,11 +19,15 @@ const Home = () => {
     };
 
     // Handle form submission
+    // import axios from 'axios';
+
     const handleSubmit = async (e) => {
         e.preventDefault(); // Prevent the default form submission behavior
-
+    
         try {
-            const response = await axios.post('http://localhost:9000/user/login', formData);
+            const response = await axios.post('http://localhost:9000/login', formData, {
+                withCredentials: true // Include credentials (cookies)
+            });
             console.log('Login successful:', response.data);
             // You can redirect or show a success message here
         } catch (error) {

@@ -1,6 +1,6 @@
 const userModel = require("../model/userModel")
 const bcrypt = require("bcrypt")
-var jwt = require('jsonwebtoken');
+
 
 const register = async (req, res) => {
     const { name, roll, email, password } = req.body;
@@ -23,33 +23,19 @@ const register = async (req, res) => {
         res.status(500).send("Server error");
     }
 };
-const login = async (req, res) => {
-    const { email, password } = req.body;
+// 
 
-    try {
-        const user = await userModel.findOne({ email: email });
 
-        if (!user) {
-            return res.status(404).send("User  not found");
-        }
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        
-        if (isMatch) {
-            const token = jwt.sign({ email: email }, 'shhhhh', { expiresIn: '1h' });
-            res.cookie('token', token, { httpOnly: true, secure: false });
-            return res.status(200).send("Login successful");
-        } else {
-            return res.status(401).send("Invalid password");
-        }
-    } catch (error) {
-        return res.status(500).send("Server error");
-    }
-};
 const product=(req,res)=>{
-   console.log(req.cookies);
-   res.send("ok")   
+  if(req.cookies.token){
+    console.log(req.cookies.token);
+    
+    res.send("ok")
+  }
+  else{
+    res.redirect("http://localhost:5173/home")
+  }
 }
 
 
-module.exports ={register,login,product}
+module.exports ={register,product}
